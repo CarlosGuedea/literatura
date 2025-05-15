@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+
+    <!-- Bootstrap JS -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+</head>
+<body>
+    <section class="text-center">
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+              <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+                <span class="fs-4">Taller Fundación de los Reinos</span>
+              </a>
+        
+              <ul class="nav nav-pills">
+                <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Autores</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Cuentos</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Poesias</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Cronicas</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Info</a></li>
+              </ul>
+            </header>
+          </div>
+    </section>
+
+    <section class="text-center">
+        <h2>Lista de Autores</h2>
+        <ul class="list-unstyled">
+            {% for user in users %}
+                <li>{{ user.username }} - {{ user.email }}</li>
+                {% if user.image_filename %}
+                    <li>
+                        <img src="{{ url_for('static', filename='img/' + user.image_filename) }}" alt="{{ user.username }}" width="250px">
+                    </li>
+                {% else %}
+                    <li>
+                        <img src="{{ url_for('static', filename='img/default.jpg') }}" alt="{{ user.username }}" width="250px">
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </section>
+
+    <footer class="text-center">
+        <p>&copy; 2025 Taller Fundación de los reinos</p>
+        <p>Todos los derechos reservados</p>
+        <p>Contacto: correo: guedea.fis@gmail.com</p>
+    </footer>
+</body>
+</html>

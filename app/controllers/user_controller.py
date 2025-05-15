@@ -2,7 +2,7 @@ from sqlalchemy import text
 from app import db
 
 def get_users():
-    query = text("SELECT username, email FROM users")
+    query = text("SELECT username, email, image_filename FROM users")
     result = db.session.execute(query)
     # Convertir cada fila a dict
     users = [dict(row) for row in result.mappings().all()]
