@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from app.controllers.user_controller import get_users, create_user
+from app.controllers.user_controller import get_users
 
 raiz_bp = Blueprint('raiz', __name__)
 

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+
+    <!-- Bootstrap JS -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+
+</head>
+<body>
+<!-- Estilos y script -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+
+<!-- Barra de navegación -->
+<header class="bg-light border-bottom mb-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand fs-4" href="/">Taller Fundación de los Reinos</a>
+            <!-- Botón hamburguesa -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menú colapsable -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Autores</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Cuentos</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Poesías</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Crónicas</a></li>
+                    <li class="nav-item"><a href="/posts" class="nav-link">Publicaciones</a></li>
+                    <li class="nav-item"><a href="/posts_new" class="nav-link active">Editor</a></li>
+                    <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+                    <li class="nav-item"><a href="/logout" class="nav-link">Salir</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+  <h2>Editor de textos</h2>
+</div>
+
+<form id="editorForm">
+  <div class="container" style="display: flex;">
+    <h5 style="margin-right: 4px;">Titulo</h5>
+    <input type="text" name="title" id="title" style="border: 2px solid #333333;">
+  </div>
+
+  <div style="margin-left: 4rem;">
+      <div class="form-check">
+          <input class="form-check-input" type="radio" name="genero_id" value="1" id="radioCuento">
+          <label class="form-check-label" for="radioCuento">Cuento</label>
+      </div>
+      <div class="form-check">
+          <input class="form-check-input" type="radio" name="genero_id" value="2" id="radioPoesia">
+          <label class="form-check-label" for="radioPoesia">Poesía</label>
+      </div>
+      <div class="form-check">
+          <input class="form-check-input" type="radio" name="genero_id" value="3" id="radioCronica">
+          <label class="form-check-label" for="radioCronica">Crónica</label>
+      </div>
+  </div>
+
+  <div id="editor" style="height: 200px;"></div>
+  <input type="hidden" name="contenido" id="contenido">
+
+  <div class="text-center" style="margin-top:2rem;">
+      <button class="btn btn-primary" type="submit">Enviar</button>
+  </div>
+</form>
+
+<!-- Script para guardar el contenido de Quill -->
+<script>
+  const quill = new Quill('#editor', {
+    theme: 'snow'
+  });
+
+  document.getElementById('editorForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const title = document.getElementById('title').value;
+    const content = quill.root.innerHTML;
+    const genero_id = document.querySelector('input[name="genero_id"]:checked')?.value;
+
+    // Reemplaza esto con el ID del usuario logueado si ya lo tienes disponible
+    const userId = {{ current_user.id | tojson | default("null") }};
+
+    if (!title || !content || !genero_id || !userId) {
+      alert("Todos los campos son obligatorios");
+      return;
+    }
+
+    const data = {
+      user_id: userId,
+      title: title,
+      content: content,
+      genero_id: genero_id  // si tu tabla espera "genero_id", deberías mapear el texto a un ID
+    };
+
+    fetch("/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if (response.ok) {
+        alert("Post creado exitosamente");
+        document.getElementById('editorForm').reset();
+        quill.setContents([]);
+      } else {
+        alert("Error al crear post");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("Error al enviar");
+    });
+  });
+</script>
+

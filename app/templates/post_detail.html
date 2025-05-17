@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+</head>
+<body class="text-center">
+
+<header class="bg-light border-bottom mb-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand fs-4" href="/">Taller Fundación de los Reinos</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Autores</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Cuentos</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Poesías</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Crónicas</a></li>
+                    <li class="nav-item"><a href="/posts" class="nav-link active">Publicaciones</a></li>
+                    <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <h1>{{ post.title }}</h1>
+    <p>Por {{ post.author }} el {{ post.created_at.strftime('%d-%m-%Y') }}</p>
+
+    <div class="d-flex justify-content-center">
+        <div class="text-justify" style="text-align: justify; max-width: 800px;">
+            {{ post.content | safe }}
+        </div>
+    </div>
+</div>
+
+
+    <footer class="text-center">
+        <p>&copy; 2025 Taller Fundación de los reinos</p>
+        <p>Todos los derechos reservados</p>
+        <p>Contacto: correo: guedea.fis@gmail.com</p>
+    </footer>
+
+<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+</body>
+</html>

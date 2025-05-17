@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<html>
+<title>Document</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
 
     <!-- Bootstrap JS -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-</head>
-<body>
- <!-- Barra de navegación -->
+<!-- Barra de navegación -->
 <header class="bg-light border-bottom mb-4">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
@@ -26,47 +21,27 @@
             <!-- Menú colapsable -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a href="/" class="nav-link active">Home</a></li>
+                    <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Autores</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Cuentos</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Poesías</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Crónicas</a></li>
-                    <li class="nav-item"><a href="/posts" class="nav-link">Publicaciones</a></li>
+                    <li class="nav-item"><a href="/posts" class="nav-link active">Publicaciones</a></li>
                     <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>Por {{ post.author }} el {{ post.created_at.strftime('%d-%m-%Y')  }}</p>
+    <div>{{ post.content }}</div>
 
-    <section class="text-center">
-        <h2>Lista de Autores</h2>
-        <ul class="list-unstyled">
-            {% for user in users %}
-                <li>{{ user.username }} - {{ user.email }}</li>
-                {% if user.image_filename %}
-                <br>
-                    <li>
-                        <img src="{{ url_for('static', filename='img/' + user.image_filename) }}" alt="{{ user.username }}" width="250px">
-                    </li>
-                {% else %}
-                    <li>
-                        <img src="{{ url_for('static', filename='img/default.jpg') }}" alt="{{ user.username }}" width="250px">
-                    </li>
-                    <br>
-                {% endif %}
-            {% endfor %}
-            <br>
-        </ul>
-    </section>
-
-    <footer class="text-center">
-        <p>&copy; 2025 Taller Fundación de los reinos</p>
-        <p>Todos los derechos reservados</p>
-        <p>Contacto: correo: guedea.fis@gmail.com</p>
-    </footer>
-
-    <!-- Bootstrap JS -->
+     <!-- Bootstrap JS -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 </body>
 </html>

@@ -8,3 +8,4 @@ class Post(db.Model):
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    genero_id = db.Column(db.Integer, db.ForeignKey('generos.id'), nullable=False)

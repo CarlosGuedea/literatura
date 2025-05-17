@@ -2,3 +2,6 @@ flask
 flask_sqlalchemy
 pyodbc
 python-dotenv
+gunicorn
+flask-login
+flask-wtf

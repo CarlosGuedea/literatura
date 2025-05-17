@@ -39,26 +39,22 @@
     </nav>
 </header>
 
-    <section class="text-center">
-        <h2>Lista de Autores</h2>
-        <ul class="list-unstyled">
-            {% for user in users %}
-                <li>{{ user.username }} - {{ user.email }}</li>
-                {% if user.image_filename %}
-                <br>
-                    <li>
-                        <img src="{{ url_for('static', filename='img/' + user.image_filename) }}" alt="{{ user.username }}" width="250px">
-                    </li>
-                {% else %}
-                    <li>
-                        <img src="{{ url_for('static', filename='img/default.jpg') }}" alt="{{ user.username }}" width="250px">
-                    </li>
-                    <br>
-                {% endif %}
-            {% endfor %}
-            <br>
-        </ul>
-    </section>
+<section class="text-center">
+    <h2>Iniciar Sesión</h2>
+    <form action="" method="post" class="mx-auto" style="max-width: 400px;">
+        <div class="mb-3 text-start">
+            <label for="username" class="form-label">Usuario</label>
+            <input type="text" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3 text-start">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+    </form>
+</section>
 
     <footer class="text-center">
         <p>&copy; 2025 Taller Fundación de los reinos</p>
