@@ -6,8 +6,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pompiere&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pompiere&display=swap" rel="stylesheet">
+    <meta property="og:title" content="{{ post.title }}">
+    <meta property="og:description" content="{{ post.content[:150] | striptags }}">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="{{ url_for('static', filename='img/logo.jpg', _external=True) }}">
+    <meta property="og:locale" content="es_LA">
 </head>
 
 <style>
