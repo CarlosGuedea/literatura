@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from .config import Config
+from bs4 import BeautifulSoup
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -13,10 +14,18 @@ def create_app(config_class=Config):
 
     db.init_app(app)
     login_manager.init_app(app)
-    login_manager.login_view = 'user.login' # ajusta al nombre correcto de tu blueprint y ruta
+    login_manager.login_view = 'user.login'
+
+    # Registrar filtro personalizado
+    @app.template_filter('preview')
+    def preview_filter(html, num_words=10):
+        soup = BeautifulSoup(html, 'html.parser')
+        text = soup.get_text()
+        words = text.split()
+        return ' '.join(words[:num_words]) + '...'
 
     # Importar modelos (incluye el user_loader)
-    from app.models import user  # <- IMPORTANTE: esto registra el user_loader
+    from app.models import user
 
     # Registrar Blueprints
     from app.routes.user_routes import user_bp

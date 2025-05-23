@@ -12,6 +12,36 @@ def get_posts():
     result = db.session.execute(query)
     return result.mappings().all()
 
+def get_posts_by_cuentos():
+    query = text("""SELECT posts.id, posts.title, posts.content, posts.created_at, posts.genero_id, posts.user_id,
+            users.username AS author
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE genero_id = 1
+        ORDER BY posts.id DESC""")
+    result = db.session.execute(query)
+    return result.mappings().all()
+
+def get_posts_by_poesia():
+    query = text("""SELECT posts.id, posts.title, posts.content, posts.created_at, posts.genero_id, posts.user_id,
+            users.username AS author
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE genero_id = 2
+        ORDER BY posts.id DESC""")
+    result = db.session.execute(query)
+    return result.mappings().all()
+
+def get_posts_by_cronica():
+    query = text("""SELECT posts.id, posts.title, posts.content, posts.created_at, posts.genero_id, posts.user_id,
+            users.username AS author
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        WHERE genero_id = 3
+        ORDER BY posts.id DESC""")
+    result = db.session.execute(query)
+    return result.mappings().all()
+
 def create_post(user_id, title, content, genero_id):
     query = text("INSERT INTO posts (user_id, title, content, genero_id) VALUES (:user_id, :title, :content, :genero_id)")
     db.session.execute(query, {'user_id': user_id, 'title': title, 'content': content, 'genero_id': genero_id})
@@ -42,5 +72,8 @@ def get_posts_by_user(user_id):
     result = db.session.execute(query, {'user_id': user_id})
     return result.mappings().all()
 
-
+def delete_post_by_id(post_id):
+    query = text("DELETE FROM posts WHERE id = :post_id")
+    db.session.execute(query, {'post_id': post_id})
+    db.session.commit()
 

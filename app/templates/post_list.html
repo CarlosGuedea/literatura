@@ -3,21 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Publicaciones</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pompiere&display=swap" rel="stylesheet">
 </head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0C8XNNX1CY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0C8XNNX1CY');
+</script>
+
 <body>
 <!-- Estilos y script -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
+<style>
+    nav {
+    background: linear-gradient(to right, #ff69b4, #87cefa); /* rosa a azul */
+    margin: 0;
+    padding: 0;
+    background-attachment: fixed; /* para que no se desplace al hacer scroll */
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+</style>
 
 <!-- Barra de navegación -->
 <header class="bg-light border-bottom mb-4">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand fs-4" href="/">Taller Fundación de los Reinos</a>
+            <a class="navbar-brand fs-4" href="/">El taller literario</a>
             <!-- Botón hamburguesa -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,20 +53,24 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Autores</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Cuentos</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Poesías</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Crónicas</a></li>
+                    <li class="nav-item"><a href="/cuentos" class="nav-link">Cuentos</a></li>
+                    <li class="nav-item"><a href="/poesias" class="nav-link">Poesías</a></li>
+                    <li class="nav-item"><a href="/cronicas" class="nav-link">Crónicas</a></li>
                     <li class="nav-item"><a href="/posts" class="nav-link active">Publicaciones</a></li>
+                    {%if session['user_id']%}
+                    <li class="nav-item"><a href="/posts_new" class="nav-link active">Editor</a></li>
+                    {%endif%}
                     <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
                     {% if session['user_id'] %}
-                    <li class="nav-item"><a href="/logout" class="nav-link">Salir</a></li>
+                    <li class="nav-item"><a style="color: red;" href="/logout" class="nav-link">Salir</a></li>
                     {%endif%}
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+
+
 
 <section class="text-center">
     <h2>Lista de Publicaciones</h2>
@@ -54,9 +83,16 @@
                 {% if session['user_id'] == post.user_id %}
                 <div class="d-inline ms-3">
                     <a class="btn btn-info btn-sm" href="{{ url_for('post.edit_post', post_id=post.id) }}">Editar</a>
-                    <a class="btn btn-danger btn-sm ms-2" href="{{ url_for('post.delete_post', post_id=post.id) }}">Eliminar</a>
+                    <a href="#" class="btn btn-danger btn-sm ms-2" onclick="confirmDelete({{ post.id }}); return false;">Eliminar</a>
+                    <!-- Formulario oculto -->
+                    <form id="delete-form-{{ post.id }}" action="{{ url_for('post.delete_post', post_id=post.id) }}" method="post" style="display: none;">
+                    </form>
                 </div>
                 {% endif %}
+                <br>
+                <div>
+                   <p>{{ post.content | preview }} Ver mas</p>
+                </div>
             </li>
             <br>
         {% endfor %}
@@ -66,12 +102,29 @@
 
 
     <footer class="text-center">
-        <p>&copy; 2025 Taller Fundación de los reinos</p>
+        <p>&copy; 2025 El taller literario</p>
         <p>Todos los derechos reservados</p>
         <p>Contacto: correo: guedea.fis@gmail.com</p>
+        <a href="https://www.facebook.com/profile.php?id=61576583792585" 
+        class="btn btn-primary" 
+        target="_blank" 
+        rel="noopener noreferrer">
+        Visítanos en Facebook
+        </a>
+
+
     </footer>
 
     <!-- Bootstrap JS -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 </body>
+
+<script>
+    function confirmDelete(postId) {
+    if (confirm("¿Estás seguro de que deseas eliminar este post?")) {
+      document.getElementById('delete-form-' + postId).submit();
+    }
+  }
+</script>
+
 </html>

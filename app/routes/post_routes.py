@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for
-from app.controllers.post_controller import get_posts, create_post, get_post_by_id
+from app.controllers.post_controller import get_posts, create_post, get_post_by_id, get_posts_by_cuentos, get_posts_by_poesia, get_posts_by_cronica, delete_post_by_id
 from flask_login import login_required
 from app import db
 from sqlalchemy import text
@@ -15,6 +15,21 @@ def new_post():
 def list_posts():
     posts = get_posts()
     return render_template('post_list.html', posts=posts)
+
+@post_bp.route('/cuentos', methods=['GET'])
+def list_cuentos():
+    cuentos = get_posts_by_cuentos()
+    return render_template('cuentos.html', cuentos=cuentos)
+
+@post_bp.route('/poesias', methods=['GET'])
+def list_poesias():
+    poesias = get_posts_by_poesia()
+    return render_template('poesias.html', poesias=poesias)
+
+@post_bp.route('/cronicas', methods=['GET'])
+def cronicas():
+    cronicas = get_posts_by_cronica()
+    return render_template('cronicas.html', cronicas=cronicas)
 
 @post_bp.route('/posts', methods=['POST'])
 @login_required
@@ -57,14 +72,21 @@ def edit_post(post_id):
             'id': post_id
         })
         db.session.commit()
-        return redirect(url_for('post.view_post', post_id=post_id))
+        return redirect(url_for('post.show_post', post_id=post_id))
 
     return render_template('post_edit.html', post=post)
+
 
 
 @post_bp.route('/posts/<int:post_id>/delete', methods=['POST'])
 @login_required
 def delete_post(post_id):
-    # lógica para eliminar el post
-    ...
-    return redirect(url_for('post.list_posts'))
+    post = get_post_by_id(post_id)
+    if not post:
+        return "Post no encontrado", 404
+
+    if post['user_id'] != session.get('user_id'):
+        return "No tienes permiso para eliminar este post", 403
+
+    delete_post_by_id(post_id)
+    return redirect(url_for('post.list_posts'))  # Ajusta a tu vista principal de posts

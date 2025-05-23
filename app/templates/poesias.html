@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ post.title }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicaciones</title>
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,23 +33,31 @@
   gtag('config', 'G-0C8XNNX1CY');
 </script>
 
-<body class="text-center">
+<body>
+<!-- Estilos y script -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
+
+<!-- Barra de navegación -->
 <header class="bg-light border-bottom mb-4">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand fs-4" href="/">El taller literario</a>
+            <!-- Botón hamburguesa -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Menú colapsable -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                     <li class="nav-item"><a href="/cuentos" class="nav-link">Cuentos</a></li>
-                    <li class="nav-item"><a href="/poesias" class="nav-link">Poesías</a></li>
+                    <li class="nav-item"><a href="/poesias" class="nav-link active">Poesías</a></li>
                     <li class="nav-item"><a href="/cronicas" class="nav-link">Crónicas</a></li>
-                    <li class="nav-item"><a href="/posts" class="nav-link active">Publicaciones</a></li>
+                    <li class="nav-item"><a href="/posts" class="nav-link">Publicaciones</a></li>
                     {%if session['user_id']%}
                     <li class="nav-item"><a href="/posts_new" class="nav-link active">Editor</a></li>
                     {%endif%}
@@ -61,16 +71,30 @@
     </nav>
 </header>
 
-<div class="container">
-    <h1>{{ post.title }}</h1>
-    <p>Por {{ post.author }} el {{ post.created_at.strftime('%d-%m-%Y') }}</p>
 
-    <div class="d-flex justify-content-center">
-        <div class="text-justify" style="text-align: justify; max-width: 800px;">
-            {{ post.content | safe }}
-        </div>
-    </div>
-</div>
+
+<section class="text-center">
+    <h2>Lista de Poesias</h2>
+    <ul class="list-unstyled">
+        {% for poesia in poesias %}
+            <li>
+                <a class="text-decoration-none t" href="/posts/{{ poesia.id }}">
+                    {{ poesia.created_at.strftime('%d-%m-%Y') }} - {{ poesia.author }} - {{ poesia.title }}
+                </a>
+                {% if session['user_id'] == poesia.user_id %}
+                <div class="d-inline ms-3">
+                    <a class="btn btn-info btn-sm" href="{{ url_for('post.edit_post', post_id=poesia.id) }}">Editar</a>
+                    <a class="btn btn-danger btn-sm ms-2" href="{{ url_for('post.delete_post', post_id=poesia.id) }}">Eliminar</a>
+                </div>
+                {% endif %}
+            </li>
+            <div>
+                   <p>{{ poesia.content | preview }} Ver mas</p>
+                </div>
+        {% endfor %}
+    </ul>
+    
+</section>
 
 
     <footer class="text-center">
@@ -85,6 +109,7 @@
         </a>
     </footer>
 
-<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <!-- Bootstrap JS -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 </body>
 </html>
